@@ -1,0 +1,305 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package proyectofisica;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+/**
+ *
+ * @author dulce
+ */
+public class MRU extends javax.swing.JFrame {
+
+    /**
+     * Creates new form MRU_MRUV
+     */
+    public MRU() {
+        initComponents();
+        inicializarComboBox();
+        configurarListeners();
+        
+    }
+    private void inicializarComboBox(){
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem("Velocidad");
+        jComboBox1.addItem("Tiempo");
+        jComboBox1.addItem("Distancia"); 
+    }
+    private void configurarListeners(){
+        jComboBox1.addActionListener(e ->actualizarCamposSegunSeleccion());
+        resultado.addActionListener(e ->calcularMRU());
+        
+        agregarValidacionNumerica(Velocidad);
+        agregarValidacionNumerica(Tiempo);
+        agregarValidacionNumerica(Distancia);
+    }
+    private void actualizarCamposSegunSeleccion(){
+        String seleccion = (String) jComboBox1.getSelectedItem();
+        
+        Velocidad.setEditable(!seleccion.equals("Velocidad"));
+        Tiempo.setEditable(!seleccion.equals("Tiempo"));
+        Distancia.setEditable(!seleccion.equals("Distancia"));
+        
+        if(seleccion.equals("Velocidad"))Velocidad.setText("");
+        if(seleccion.equals("Tiempo"))Tiempo.setText("");
+        if(seleccion.equals("Distancia"))Distancia.setText("");
+    }
+    private void calcularMRU(){
+        try {
+          String variableABuscar = (String) jComboBox1.getSelectedItem();
+        double velocidad = obtenerValor(Velocidad);
+        double tiempo = obtenerValor(Tiempo);
+        double distancia = obtenerValor(Distancia);
+        
+        String formula = "";
+        double resultado = 0;
+        String unidad="";
+        
+        switch (variableABuscar) {
+            case "Velocidad":
+                if(tiempo <0)throw new IllegalArgumentException("El tiempo no puede ser negativo");
+                if(tiempo == 0 && distancia !=0)throw new IllegalArgumentException("La velocidad seria infinita cuando el tiempo es 0 y distancia no es 0");
+                resultado = (tiempo == 0)? 0: distancia / tiempo;
+                formula = "v = d/t";
+                unidad = "m/s";
+                break;
+            case "Tiempo":
+                if(velocidad <= 0)throw new IllegalArgumentException("La velocidad debe ser mayor que cero");
+                if(distancia <0)throw new IllegalArgumentException("La distancia no puede ser negativa");
+                resultado = distancia/ velocidad;
+                formula = "t = d/v";
+                unidad = "s";
+                break;
+            case "Distancia":
+                if(velocidad <0)throw  new IllegalArgumentException("La velociadad no puede ser negativa");
+                if(tiempo <0) throw new IllegalAccessException("El tiempo no puede ser negativo");
+                resultado = velocidad * tiempo;
+                formula = "d = v*t";
+                unidad = "m";
+                break;
+        }
+        jTextFieldFormula.setText(formula);
+        jTextFieldResultado.setText(String.format("%.2f %s", resultado,unidad));  
+        
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese valores numericos validos", "Error", JOptionPane.ERROR_MESSAGE);
+        }catch(IllegalAccessException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private double obtenerValor(JTextField textField){
+        String texto = textField.getText().trim();
+        return texto.isEmpty()? 0:Double.parseDouble(texto);
+    }
+    private String obtenerUnidad(String variable){
+        switch (variable) {
+            case "Velocidad": return "m/s";
+            case "Tiempo": return "s";
+            case "Distancia": return "m";
+            default: return "";
+        }
+    }
+    private void agregarValidacionNumerica(JTextField textField){
+        textField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt){
+                char c= evt.getKeyChar();
+                if(!(Character.isDigit(c)|| c == '.' || c == '-'||c =='\b')){
+                    evt.consume();
+                }
+               if (c == '-' && textField.getCaretPosition() != 0) {
+                    evt.consume();
+                if (c == '-' && textField.getCaretPosition() != 0) {
+                    evt.consume();
+                }
+               }
+            }
+        });
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        Velocidad = new javax.swing.JTextField();
+        Tiempo = new javax.swing.JTextField();
+        Distancia = new javax.swing.JTextField();
+        jTextFieldResultado = new javax.swing.JTextField();
+        resultado = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jTextFieldFormula = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setFont(new java.awt.Font("Berlin Sans FB", 0, 48)); // NOI18N
+        jLabel1.setText("MRU");
+
+        jButton1.setText("Salir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("¿Que deseas encontrar?");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel3.setText("¿Que datos conoces?");
+
+        jLabel4.setText("Velocidad");
+
+        jLabel5.setText("Tiempo ");
+
+        jLabel6.setText("Distancia");
+
+        jLabel7.setText("Resultado");
+
+        jTextFieldResultado.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
+
+        resultado.setText("Calcular");
+
+        jLabel8.setText("Formula");
+
+        jTextFieldFormula.setFont(new java.awt.Font("Berlin Sans FB", 0, 18)); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(269, 269, 269)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(189, 189, 189)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(146, 146, 146)
+                .addComponent(resultado))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(260, 458, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel4))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Distancia, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextFieldFormula, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextFieldResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
+                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextFieldResultado))
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Distancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldFormula, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(98, 98, 98)))
+                .addComponent(resultado)
+                .addGap(38, 38, 38))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+  
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Distancia;
+    private javax.swing.JTextField Tiempo;
+    private javax.swing.JTextField Velocidad;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JTextField jTextFieldFormula;
+    private javax.swing.JTextField jTextFieldResultado;
+    private javax.swing.JButton resultado;
+    // End of variables declaration//GEN-END:variables
+}
