@@ -25,7 +25,7 @@ public class ConversordeMedidas extends javax.swing.JFrame {
     }
     private void llenarCombobox1(){
         comboLongitud1.removeAllItems();
-        comboLongitud1.addItem("Metros");
+        comboLongitud1.addItem("kilometros");
         comboLongitud1.addItem("Kilometros");
         comboLongitud1.addItem("Millas");
         comboLongitud1.addItem("Pies");
